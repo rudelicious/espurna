@@ -84,8 +84,8 @@ PROGMEM const char espurna_modules[] =
     #if RFM69_SUPPORT
         "RFM69 "
     #endif
-    #if RF_SUPPORT
-        "RF "
+    #if RFB_SUPPORT
+        "RFB "
     #endif
     #if RPN_RULES_SUPPORT
         "RPN_RULES "
@@ -202,6 +202,9 @@ PROGMEM const char espurna_sensors[] =
     #endif
     #if BMX280_SUPPORT
         "BMX280 "
+    #endif
+    #if BME680_SUPPORT
+        "BME680 "
     #endif
     #if CSE7766_SUPPORT
         "CSE7766 "

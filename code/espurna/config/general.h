@@ -79,7 +79,7 @@
 //------------------------------------------------------------------------------
 
 // UDP debug log
-// To receive the message son the destination computer use nc:
+// To receive the message on the destination computer use nc:
 // nc -ul 8113
 
 #ifndef DEBUG_UDP_SUPPORT
@@ -529,6 +529,11 @@
                                                            // By default or when empty, admin password is used instead.
 #endif
 
+#ifndef WIFI_AP_LEASES_SUPPORT
+#define WIFI_AP_LEASES_SUPPORT      0                      // (optional) Specify softAp MAC<->IP DHCP reservations
+                                                           // Use `set wifiApLease# MAC`, where MAC is a valid 12-byte HEX number without colons
+#endif
+
 #ifndef WIFI_SLEEP_MODE
 #define WIFI_SLEEP_MODE             WIFI_NONE_SLEEP        // WIFI_NONE_SLEEP, WIFI_LIGHT_SLEEP or WIFI_MODEM_SLEEP
 #endif
@@ -667,7 +672,7 @@
 #endif
 
 // ref: https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/kconfig.html#config-lwip-esp-gratuitous-arp
-// ref: https://github.com/xoseperez/espurna/pull/1877#issuecomment-525612546 
+// ref: https://github.com/xoseperez/espurna/pull/1877#issuecomment-525612546
 //
 // Broadcast gratuitous ARP periodically to update ARP tables on the AP and all devices on the same network.
 // Helps to solve compatibility issues when ESP fails to timely reply to ARP requests, causing the device's ARP table entry to expire.
@@ -1028,7 +1033,7 @@
 #endif
 
 #ifndef MQTT_SECURE_CLIENT_MFLN
-#define MQTT_SECURE_CLIENT_MFLN     SECURE_CLIENT_MFLN  // Use global MFLN setting by default 
+#define MQTT_SECURE_CLIENT_MFLN     SECURE_CLIENT_MFLN  // Use global MFLN setting by default
 #endif
 
 #ifndef MQTT_SECURE_CLIENT_INCLUDE_CA
@@ -1093,12 +1098,8 @@
 #endif
 
 
-#ifndef MQTT_SKIP_RETAINED
-#define MQTT_SKIP_RETAINED          1               // Skip retained messages on connection
-#endif
-
 #ifndef MQTT_SKIP_TIME
-#define MQTT_SKIP_TIME              1000            // Skip messages for 1 second anter connection
+#define MQTT_SKIP_TIME              0               // Skip messages for N ms after connection. Disabled by default
 #endif
 
 #ifndef MQTT_USE_JSON
@@ -1616,40 +1617,26 @@
 
 
 // -----------------------------------------------------------------------------
-// MQTT RF BRIDGE
+// RF BRIDGE
 // -----------------------------------------------------------------------------
 
-#ifndef RF_SUPPORT
-#define RF_SUPPORT                  0
+#ifndef RFB_SUPPORT
+#define RFB_SUPPORT                  0
 #endif
 
-#ifndef RF_DEBOUNCE
-#define RF_DEBOUNCE                 500
+#ifndef RFB_SEND_REPEATS
+#define RFB_SEND_REPEATS             1               // How many times to send the message
 #endif
 
-#ifndef RF_LEARN_TIMEOUT
-#define RF_LEARN_TIMEOUT            60000
-#endif
-
-#ifndef RF_SEND_TIMES
-#define RF_SEND_TIMES               4               // How many times to send the message
-#endif
-
-#ifndef RF_SEND_DELAY
-#define RF_SEND_DELAY               500             // Interval between sendings in ms
-#endif
-
-#ifndef RF_RECEIVE_DELAY
-#define RF_RECEIVE_DELAY            500             // Interval between recieving in ms (avoid debouncing)
-#endif
-
-// Enable RCSwitch support
+// - RFB_PROVIDER_EFM8BB1
+// Default option for the ITEAD_SONOFF_RFBRIDGE or any custom firmware implementing the protocol
+// - RFB_PROVIDER_RCSWITCH
 // Originally implemented for SONOFF BASIC
 // https://tinkerman.cat/adding-rf-to-a-non-rf-itead-sonoff/
 // Also possible to use with SONOFF RF BRIDGE, thanks to @wildwiz
 // https://github.com/xoseperez/espurna/wiki/Hardware-Itead-Sonoff-RF-Bridge---Direct-Hack
-#ifndef RFB_DIRECT
-#define RFB_DIRECT                  0
+#ifndef RFB_PROVIDER
+#define RFB_PROVIDER                RFB_PROVIDER_RCSWITCH
 #endif
 
 #ifndef RFB_RX_PIN
@@ -1660,6 +1647,21 @@
 #define RFB_TX_PIN                  GPIO_NONE
 #endif
 
+#ifndef RFB_LEARN_TIMEOUT
+#define RFB_LEARN_TIMEOUT           15000
+#endif
+
+#ifndef RFB_SEND_DELAY
+#define RFB_SEND_DELAY              500             // Interval between sendings in ms
+#endif
+
+#ifndef RFB_RECEIVE_DELAY
+#define RFB_RECEIVE_DELAY           500             // Interval between recieving in ms (avoid bouncing)
+#endif
+
+#ifndef RFB_TRANSMIT_REPEATS
+#define RFB_TRANSMIT_REPEATS        5               // How many times RCSwitch will repeat the message
+#endif
 
 // -----------------------------------------------------------------------------
 // IR Bridge

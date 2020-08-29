@@ -59,6 +59,10 @@ Copyright (C) 2016-2019 by Xose Pérez <xose dot perez at gmail dot com>
     #include "sensors/BMX280Sensor.h"
 #endif
 
+#if BME680_SUPPORT
+    #include "sensors/BME680Sensor.h"
+#endif
+
 #if CSE7766_SUPPORT
     #include "sensors/CSE7766Sensor.h"
 #endif
@@ -515,6 +519,8 @@ sensor_magnitude_t::sensor_magnitude_t(unsigned char slot, unsigned char index_l
     ++_counts[type];
 
     switch (type) {
+        case MAGNITUDE_IAQ:
+        case MAGNITUDE_IAQ_STATIC:
         case MAGNITUDE_ENERGY:
             filter = new LastFilter();
             break;
@@ -573,6 +579,8 @@ unsigned char _sensorUnitDecimals(sensor::Unit unit) {
         case sensor::Unit::Hertz:
             return 1;
         case sensor::Unit::UltravioletIndex:
+            return 3;
+        case sensor::Unit::Ph:
             return 3;
         case sensor::Unit::None:
         default:
@@ -638,6 +646,18 @@ String magnitudeTopic(unsigned char type) {
             break;
         case MAGNITUDE_CO2:
             result = F("co2");
+            break;
+        case MAGNITUDE_VOC:
+            result = F("voc");
+            break;
+        case MAGNITUDE_IAQ:
+            result = F("iaq");
+            break;
+        case MAGNITUDE_IAQ_ACCURACY:
+            result = F("iaq_accuracy");
+            break;
+        case MAGNITUDE_IAQ_STATIC:
+            result = F("iaq_static");
             break;
         case MAGNITUDE_LUX:
             result = F("lux");
@@ -925,6 +945,10 @@ const char * const _magnitudeSettingsPrefix(unsigned char type) {
     case MAGNITUDE_PM2dot5: return "pm1dot5";
     case MAGNITUDE_PM10: return "pm10";
     case MAGNITUDE_CO2: return "co2";
+    case MAGNITUDE_VOC: return "voc";
+    case MAGNITUDE_IAQ: return "iaq";
+    case MAGNITUDE_IAQ_ACCURACY: return "iaqAccuracy";
+    case MAGNITUDE_IAQ_STATIC: return "iaqStatic";
     case MAGNITUDE_LUX: return "lux";
     case MAGNITUDE_UVA: return "uva";
     case MAGNITUDE_UVB: return "uvb";
@@ -1153,6 +1177,18 @@ String magnitudeName(unsigned char type) {
         case MAGNITUDE_CO2:
             result = F("CO2");
             break;
+        case MAGNITUDE_VOC:
+            result = F("VOC");
+            break;
+        case MAGNITUDE_IAQ_STATIC:
+            result = F("IAQ (Static)");
+            break;
+        case MAGNITUDE_IAQ:
+            result = F("IAQ");
+            break;
+        case MAGNITUDE_IAQ_ACCURACY:
+            result = F("IAQ Accuracy");
+            break;
         case MAGNITUDE_LUX:
             result = F("Lux");
             break;
@@ -1367,27 +1403,50 @@ void _sensorWebSocketOnConnected(JsonObject& root) {
 
 #if API_SUPPORT
 
-void _sensorAPISetup() {
+String _sensorApiMagnitudeName(sensor_magnitude_t& magnitude) {
+    String name = magnitudeTopic(magnitude.type);
+    if (SENSOR_USE_INDEX || (sensor_magnitude_t::counts(magnitude.type) > 1)) name = name + "/" + String(magnitude.index_global);
 
+    return name;
+}
+
+void _sensorApiJsonCallback(const Api&, JsonObject& root) {
+    JsonArray& magnitudes = root.createNestedArray("magnitudes");
     for (auto& magnitude : _magnitudes) {
+        JsonArray& data = magnitudes.createNestedArray();
+        data.add(_sensorApiMagnitudeName(magnitude));
+        data.add(magnitude.last);
+        data.add(magnitude.reported);
+    }
+}
 
-        String topic = magnitudeTopic(magnitude.type);
-        if (SENSOR_USE_INDEX || (sensor_magnitude_t::counts(magnitude.type) > 1)) topic = topic + "/" + String(magnitude.index_global);
+void _sensorApiGetValue(const Api& api, ApiBuffer& buffer) {
+    auto& magnitude = _magnitudes[api.arg];
+    double value = _sensor_realtime ? magnitude.last : magnitude.reported;
+    dtostrf(value, 1, magnitude.decimals, buffer.data);
+}
 
-        api_get_callback_f get_cb = [&magnitude](char * buffer, size_t len) {
-            double value = _sensor_realtime ? magnitude.last : magnitude.reported;
-            dtostrf(value, 1, magnitude.decimals, buffer);
-        };
-        api_put_callback_f put_cb = nullptr;
+void _sensorApiResetEnergyPutCallback(const Api& api, ApiBuffer& buffer) {
+    _sensorApiResetEnergy(_magnitudes[api.arg], buffer.data);
+}
 
-        if (magnitude.type == MAGNITUDE_ENERGY) {
-            put_cb = [&magnitude](const char* payload) {
-                _sensorApiResetEnergy(magnitude, payload);
-            };
-        }
+void _sensorApiSetup() {
 
-        apiRegister(topic.c_str(), get_cb, put_cb);
+    apiReserve(
+        _magnitudes.size() + sensor_magnitude_t::counts(MAGNITUDE_ENERGY) + 1u
+    );
 
+    apiRegister({"magnitudes", Api::Type::Json, ApiUnusedArg, _sensorApiJsonCallback});
+
+    for (unsigned char id = 0; id < _magnitudes.size(); ++id) {
+        apiRegister({
+            _sensorApiMagnitudeName(_magnitudes[id]).c_str(),
+            Api::Type::Basic, id,
+            _sensorApiGetValue,
+            (_magnitudes[id].type == MAGNITUDE_ENERGY)
+                ? _sensorApiResetEnergyPutCallback
+                : nullptr
+        });
     }
 
 }
@@ -1565,6 +1624,14 @@ void _sensorLoad() {
             sensor->setAddress(address_map[n]);
             _sensors.push_back(sensor);
         }
+    }
+    #endif
+
+    #if BME680_SUPPORT
+    {
+        BME680Sensor * sensor = new BME680Sensor();
+        sensor->setAddress(BME680_I2C_ADDRESS);
+        _sensors.push_back(sensor);
     }
     #endif
 
@@ -1984,7 +2051,7 @@ void _sensorLoad() {
         _sensors.push_back(sensor);
     }
     #endif
-	
+
     #if T6613_SUPPORT
     {
         T6613Sensor * sensor = new T6613Sensor();
@@ -2598,7 +2665,7 @@ void sensorSetup() {
 
     // API
     #if API_SUPPORT
-        _sensorAPISetup();
+        _sensorApiSetup();
     #endif
 
     // Terminal

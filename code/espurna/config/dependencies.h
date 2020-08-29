@@ -49,11 +49,6 @@
 #define MQTT_SUPPORT                1
 #endif
 
-#if RF_SUPPORT
-#undef RELAY_SUPPORT
-#define RELAY_SUPPORT               1
-#endif
-
 #if LED_SUPPORT
 #undef BROKER_SUPPORT
 #define BROKER_SUPPORT              1               // If LED is enabled enable BROKER to supply status changes
@@ -220,4 +215,13 @@
 #if not defined(MQTT_MAX_PACKET_SIZE)
 #warning "MQTT_MAX_PACKET_SIZE should be set in `build_flags = ...` of the environment! Default value is used instead."
 #endif
+#endif
+
+//------------------------------------------------------------------------------
+// Disable BME680 support if using Core version 2.3.0 due to memory constraints.
+
+#if BME680_SUPPORT && defined(ARDUINO_ESP8266_RELEASE_2_3_0)
+#warning "BME680_SUPPORT is not available when using Arduino Core 2.3.0 due to memory constraints. Please use Arduino Core 2.6.3+ instead (or set `platform = ${common.platform_latest}` for the latest version)."
+#undef BME680_SUPPORT
+#define BME680_SUPPORT 0
 #endif

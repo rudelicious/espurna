@@ -117,9 +117,10 @@ class BaseSensor {
                 case MAGNITUDE_PM1dot0:
                 case MAGNITUDE_PM2dot5:
                     return sensor::Unit::MicrogrammPerCubicMeter;
+                case MAGNITUDE_CO:
                 case MAGNITUDE_CO2:
                 case MAGNITUDE_NO2:
-                case MAGNITUDE_CO:
+                case MAGNITUDE_VOC:
                     return sensor::Unit::PartsPerMillion;
                 case MAGNITUDE_LUX:
                     return sensor::Unit::Lux;
@@ -135,6 +136,8 @@ class BaseSensor {
                     return sensor::Unit::Meter;
                 case MAGNITUDE_FREQUENCY:
                     return sensor::Unit::Hertz;
+                case MAGNITUDE_PH:
+                    return sensor::Unit::Ph;
                 default:
                     return sensor::Unit::None;
             }

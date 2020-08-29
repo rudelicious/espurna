@@ -207,7 +207,7 @@
 //#define NTP_SUPPORT            0
 //#define OTA_ARDUINOOTA_SUPPORT 1
 //#define RFM69_SUPPORT          1
-//#define RF_SUPPORT             1
+//#define RFB_SUPPORT            1
 //#define RPN_RULES_SUPPORT      0
 //#define SCHEDULER_SUPPORT      0
 //#define SPIFFS_SUPPORT         1
@@ -229,6 +229,7 @@
 //#define BH1750_SUPPORT         1
 //#define BMP180_SUPPORT         1
 //#define BMX280_SUPPORT         1
+//#define BME680_SUPPORT         1
 //#define CSE7766_SUPPORT        1
 //#define DALLAS_SUPPORT         1
 //#define DHT_SUPPORT            1
