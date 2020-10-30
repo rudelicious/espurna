@@ -3113,7 +3113,7 @@
     #define HLW8012_SUPPORT             1
     #endif
     #define HLW8012_SEL_PIN             12
-    #define HLW8012_CF1_PIN             14
+    #define HLW8012_CF1_PIN             4//14
     #define HLW8012_CF_PIN              5
 
     #define HLW8012_SEL_CURRENT         LOW
