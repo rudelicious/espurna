@@ -1,0 +1,9 @@
+
+
+https://templates.blakadder.com/blitzwolf_SHP6.html
+{"NAME":"BW-SHP6 10A","GPIO":[158,255,56,255,0,134,0,0,131,17,132,21,0],"FLAG":0,"BASE":45}
+
+https://templates.blakadder.com/blitzwolf_SHP6-15A.html
+{"NAME":"BlitzWolf SHP6","GPIO":[56,255,158,255,132,134,0,0,131,17,0,21,0],"FLAG":0,"BASE":45}
+
+https://tasmota.github.io/docs/devices/BlitzWolf-SHP6/
