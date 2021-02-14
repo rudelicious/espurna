@@ -1,6 +1,8 @@
+https://github.com/xoseperez/espurna
 
 #_ OTA
 https://github.com/xoseperez/espurna/wiki/TwoStepUpdates
+https://arduino-esp8266.readthedocs.io/en/latest/ota_updates/readme.html#compression
 gzip -9 firmware.bin
 (Upload firmware.gz via web UI)
 
@@ -19,6 +21,10 @@ https://tasmota.github.io/docs/devices/BlitzWolf-SHP6/
 
 Fix V and I readings > change pin in espurna/config/hardware.h:
 #define HLW8012_CF1_PIN             4//14
+
+Runtime (via WebUI Debug panel or Telnet)
+set snsHlw8012Cf1GPIO 4
+(reboot)
 
 
 https://github.com/xoseperez/espurna/issues/1998
