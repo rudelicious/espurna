@@ -1,0 +1,331 @@
+<https://github.com/xoseperez/espurna/wiki/OTA>
+<https://github.com/xoseperez/espurna/wiki/TwoStepUpdates>
+<https://arduino-esp8266.readthedocs.io/en/latest/ota_updates/readme.html#compression>
+
+
+
+//_UPLOAD BASE IMAGE
+Upload compressed base image (firmware.bin.gz) via web interface.
+python.exe .\ota.py --flash --password "ESPress0" --flags "-DESPURNA_CORE_WEBUI -DUSE_CUSTOM_H" ESPURNA-7D8621
+D:\>curl --digest --user admin:ESPress0 --header "Content-Type: multipart/form-data" --form "filename=@firmware-core.bin" --verbose http://192.168.2.100/upgrade
+D:\>curl --digest --user admin:ESPress0 --header "Content-Type: multipart/form-data" --form "filename=@core-webui-1mb_firmware.bin.gz" --verbose http://192.168.2.100/upgrade
+
+python.exe .\ota.py --flash --password "ESPress0" --flags "-DESPURNA_CORE -DUSE_CUSTOM_H" ESPURNA-7D8621
+python.exe .\ota.py --flash --password "ESPress0" --flags "ESPURNA_CORE_WEBUI" ESPURNA-7D8621
+python.exe .\ota.py --flash --password "ESPress0" --flags "ESPURNA_CORE" ESPURNA-7D8621
+
+python.exe .\ota.py  --arduino-core current --flash --password "ESPress0" ESPURNA-7D8621
+python.exe .\ota.py  -core --flash --password "ESPress0" ESPURNA-7D8621
+python.exe .\ota.py  -core-webui --flash --password "ESPress0" ESPURNA-7D8621 
+
+python.exe .\ota.py --flash --password "ESPress0" --flags "-DBLITZWOLF_BWSHPX -DUSE_CUSTOM_H" ESPURNA-7D8621
+
+//_UPLOAD IMAGE 
+D:\>curl --digest --user admin:ESPress0 --header "Content-Type: multipart/form-data" --form "filename=@blitzwolf-bwshpx_firmware-1.15.0-dev.bin.gz" --verbose http://192.168.2.100/upgrade
+
+
+////_
+//_PIO ENV
+C:\Users\r\
+D:\>python %USERPROFILE%\.platformio\packages\framework-arduinoespressif8266\tools\espota.py --ip=192.168.2.100 --auth=ESPress0 --file=core-webui-1mb_firmware.bin.gz --debug --progress
+
+11:20:19 [DEBUG]: Options: {'esp_ip': '192.168.2.100', 'host_ip': '0.0.0.0', 'esp_port': 8266, 'host_port': 39331, 'auth': 'ESPress0', 'image': 'core-webui-1mb_firmware.bin.gz', 'spiffs': False, 'debug': True, 'progress': True}
+11:20:19 [INFO]: Starting on 0.0.0.0:39331
+11:20:19 [INFO]: Upload size: 349157
+11:20:19 [INFO]: Sending invitation to: 192.168.2.100
+Authenticating...OK
+11:20:19 [INFO]: Waiting for device...
+Uploading: [============================================================] 100% Done...
+
+11:20:30 [INFO]: Waiting for result...
+11:20:32 [INFO]: Result: OK
+
+
+
+blitzwolf-bwshpx 
+blitzwolf-bwshpx-v23
+espurna-core-webui-1MB
+espurna-core-1MB
+
+pio run --target upload --environment espurna-core-webui-1MB 
+
+
+
+PS D:\DEV\_PROJECTS\PLATFORMIO\espurna\code> 
+virtualenv .venv
+source .venv/bin/activate
+
+//_ESPurna OTA Manager
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS D:\DEV\_PROJECTS\PLATFORMIO\espurna\code> & d:/DEV/_PROJECTS/PLATFORMIO/espurna/code/.venv/Scripts/Activate.ps1
+
+(.venv) PS D:\DEV\_PROJECTS\PLATFORMIO\espurna\code> python .\ota.py
+
+ESPurna OTA Manager v0.4.2
+
+  1  ESPURNA-FC4C08  192.168.2.106    DC:4F:22:FC:4C:08  ESPURNA       1.15.0-dev    2020-09-08 08:51:33   BLITZWOLF_BWSHPX_V23       1024      1024      438272
+  2  ESPURNA-7D8621  192.168.2.100    B4:E6:2D:7D:86:21  ESPURNA       1.15.0-dev    2021-02-14 12:45:02   BLITZWOLF_BWSHPX           1024      1024      651264
+  3  ESPURNA-C4BD38  192.168.2.111    60:01:94:C4:BD:38  ESPURNA       1.15.0-dev    2020-08-29 10:07:09   BLITZWOLF_BWSHPX_V23       1024      1024      438272
+  4  ESPURNA-26CBC0  192.168.2.107    50:02:91:26:CB:C0  ESPURNA       1.15.0-dev    2020-10-30 10:13:53   BLITZWOLF_BWSHPX           2048      1024      446464
+
+HOST    = ESPURNA-7D8621
+IP      = 192.168.2.100
+BOARD   = BLITZWOLF_BWSHPX
+AUTH    = ESPress0
+FLAGS   = ESPURNA_CORE
+ENV     = esp8266-1m-base
+
+Are these values right [y/N]: y
+
+Building and flashing image over-the-air...
+RAM:   [=====     ]  51.4% (used 42084 bytes from 81920 bytes)
+Flash: [======    ]  58.0% (used 594208 bytes from 1023984 bytes)
+13:18:00 [DEBUG]: Options: {'esp_ip': '192.168.2.100', 'host_ip': '0.0.0.0', 'esp_port': 8266, 'host_port': 51845, 
+'auth': 'ESPress0', 'image': '.pio\\build\\esp8266-1m-base\\firmware.bin', 'spiffs': False, 'debug': True, 'progress': True}
+13:18:00 [INFO]: Starting on 0.0.0.0:51845
+13:18:00 [INFO]: Upload size: 598368
+13:18:00 [INFO]: Sending invitation to: 192.168.2.100
+Authenticating...OK
+13:18:00 [INFO]: Waiting for device...
+
+Uploading: [                                                            ] 0% 
+Uploading: [                                                            ] 0% 
+Uploading: [                                                            ] 0%
+Uploading: [                                                            ] 0%
+Uploading: [=                                                           ] 0%
+Uploading: [=                                                           ] 1% 
+Uploading: [=                                                           ] 1%
+Uploading: [=                                                           ] 1% 
+Uploading: [=                                                           ] 1%
+Uploading: [=                                                           ] 2% 
+[...]
+Uploading: [============================================================] 99% 
+Uploading: [============================================================] 99% 
+Uploading: [============================================================] 99%
+Uploading: [============================================================] 100% Done...
+
+
+13:18:21 [INFO]: Waiting for result...
+13:18:22 [INFO]: Result: OK
+(.venv) PS D:\DEV\_PROJECTS\PLATFORMIO\espurna\code> 
+
+
+ESPurna OTA Manager v0.4.2
+
+  1  ESPURNA-FC4C08  192.168.2.106    DC:4F:22:FC:4C:08  ESPURNA       1.15.0-dev    2020-09-08 
+08:51:33   BLITZWOLF_BWSHPX_V23       1024      1024      438272
+  2  ESPURNA-C4BD38  192.168.2.111    60:01:94:C4:BD:38  ESPURNA       1.15.0-dev    2020-08-29 
+10:07:09   BLITZWOLF_BWSHPX_V23       1024      1024      438272
+  3  ESPURNA-7D8621  192.168.2.100    B4:E6:2D:7D:86:21  ESPURNA       1.15.0-dev    2021-02-14 
+21:21:38   BLITZWOLF_BWSHPX           1024      1024      348160
+  4  ESPURNA-26CBC0  192.168.2.107    50:02:91:26:CB:C0  ESPURNA       1.15.0-dev    2020-10-30 
+10:13:53   BLITZWOLF_BWSHPX           2048      1024      446464
+Choose the board you want to flash (empty if none of these): 3
+Authorization key of the device to flash: 
+Extra flags for the build: 
+
+HOST    = ESPURNA-7D8621
+IP      = 192.168.2.100
+BOARD   = BLITZWOLF_BWSHPX
+AUTH    = 
+FLAGS   = -DESPURNA_CORE 
+ENV     = esp8266-1m-base
+
+Are these values right [y/N]: y
+
+Building and flashing image over-the-air...
+RAM:   [====      ]  38.8% (used 31748 bytes from 81920 bytes)
+Flash: [====      ]  36.1% (used 370040 bytes from 1023984 bytes)
+11:13:04 [DEBUG]: Options: {'esp_ip': '192.168.2.100', 'host_ip': '0.0.0.0', 'esp_port': 8266, 'host_port': 21683, 'auth': '', 'image': '.pio\\build\\esp8266-1m-base\\firmware.bin', 'spiffs': 
+False, 'debug': True, 'progress': True}
+11:13:04 [INFO]: Starting on 0.0.0.0:21683
+11:13:04 [INFO]: Upload size: 374192
+11:13:04 [INFO]: Sending invitation to: 192.168.2.100
+Authenticating...FAIL
+11:13:04 [ERROR]: Authentication Failed
+
+ESPurna OTA Manager v0.4.2
+
+  1  ESPURNA-FC4C08  192.168.2.106    DC:4F:22:FC:4C:08  ESPURNA       1.15.0-dev    2020-09-08 
+08:51:33   BLITZWOLF_BWSHPX_V23       1024      1024      438272
+  2  ESPURNA-7D8621  192.168.2.100    B4:E6:2D:7D:86:21  ESPURNA       1.15.0-dev    2021-02-14 
+21:21:38   BLITZWOLF_BWSHPX           1024      1024      348160
+  3  ESPURNA-C4BD38  192.168.2.111    60:01:94:C4:BD:38  ESPURNA       1.15.0-dev    2020-08-29 
+10:07:09   BLITZWOLF_BWSHPX_V23       1024      1024      438272
+  4  ESPURNA-26CBC0  192.168.2.107    50:02:91:26:CB:C0  ESPURNA       1.15.0-dev    2020-10-30 
+10:13:53   BLITZWOLF_BWSHPX           2048      1024      446464
+Choose the board you want to flash (empty if none of these): 2
+Extra flags for the build: 
+
+HOST    = ESPURNA-7D8621
+IP      = 192.168.2.100
+BOARD   = BLITZWOLF_BWSHPX
+AUTH    = ESPress0!
+FLAGS   = -DESPURNA_CORE
+ENV     = esp8266-1m-base
+
+Are these values right [y/N]: y
+
+Building and flashing image over-the-air...
+RAM:   [====      ]  38.8% (used 31748 bytes from 81920 bytes)
+Flash: [====      ]  36.1% (used 370040 bytes from 1023984 bytes)
+11:12:12 [DEBUG]: Options: {'esp_ip': '192.168.2.100', 'host_ip': '0.0.0.0', 'esp_port': 8266, 'host_port': 29668, 'auth': 'ESPress0!', 'image': '.pio\\build\\esp8266-1m-base\\firmware.bin', 'spiffs': False, 'debug': True, 'progress': True}
+11:12:12 [INFO]: Starting on 0.0.0.0:29668
+11:12:12 [INFO]: Upload size: 374192
+11:12:12 [INFO]: Sending invitation to: 192.168.2.100
+Authenticating...FAIL
+11:12:12 [ERROR]: No Answer to our Authentication
+
+
+
+
+
+D:\>curl --digest --user admin:ESPress0 --header "Content-Type: multipart/form-data" --form "filename=@firmware-core.bin" --verbose http://192.168.2.100/upgrade
+*   Trying 192.168.2.100...
+* TCP_NODELAY set
+* Connected to 192.168.2.100 (192.168.2.100) port 80 (#0)
+* Server auth using Digest with user 'admin'
+> POST /upgrade HTTP/1.1
+> Host: 192.168.2.100
+> User-Agent: curl/7.55.1
+> Accept: */*
+> Content-Length: 0
+>
+< HTTP/1.1 401 Unauthorized
+< Content-Length: 0
+< Access-Control-Allow-Origin: http://espurna.io
+< Access-Control-Allow-Credentials: true
+< Connection: close
+< WWW-Authenticate: Digest realm="ESPURNA-7D8621", qop="auth", nonce="619477c83c5d531da8055b86f542050e", opaque="345b1787a0c115417bfe52bb55203da6"
+< Accept-Ranges: none
+<
+* Closing connection 0
+* Issue another request to this URL: 'http://192.168.2.100/upgrade'
+* Hostname 192.168.2.100 was found in DNS cache
+*   Trying 192.168.2.100...
+* TCP_NODELAY set
+* Connected to 192.168.2.100 (192.168.2.100) port 80 (#1)
+* Server auth using Digest with user 'admin'
+> POST /upgrade HTTP/1.1
+> Host: 192.168.2.100
+> Authorization: Digest username="admin",realm="ESPURNA-7D8621",nonce="619477c83c5d531da8055b86f542050e",uri="/upgrade",cnonce="9a97efea2093c839f3c56e9ed803f82b",nc=00000001,response="ed54b84df193750b69528a23dd033ac9",qop="auth",opaque="345b1787a0c115417bfe52bb55203da6"
+> User-Agent: curl/7.55.1
+> Accept: */*
+> Content-Length: 374405
+> Expect: 100-continue
+> Content-Type: multipart/form-data; boundary=------------------------6834fd130226f42e
+>
+< HTTP/1.1 100 Continue
+< HTTP/1.1 200 OK
+< Content-Length: 2
+< Content-Type: text/plain
+< Access-Control-Allow-Origin: http://espurna.io
+< Access-Control-Allow-Credentials: true
+< Connection: close
+< X-XSS-Protection: 1; mode=block
+< X-Content-Type-Options: nosniff
+< X-Frame-Options: deny
+< Connection: close
+< Accept-Ranges: none
+<
+OK* Closing connection 1
+
+
+
+
+D:\>curl --digest --user admin:ESPress0 --header "Content-Type: multipart/form-data" --form "filename=@firmware-core.bin" --verbose http://192.168.2.100/upgrade
+*   Trying 192.168.2.100...
+* TCP_NODELAY set
+* Connected to 192.168.2.100 (192.168.2.100) port 80 (#0)
+* Server auth using Digest with user 'admin'
+> POST /upgrade HTTP/1.1
+> Host: 192.168.2.100
+> User-Agent: curl/7.55.1
+> Accept: */*
+> Content-Length: 0
+>
+< HTTP/1.1 401 Unauthorized
+< Content-Length: 0
+< Access-Control-Allow-Origin: http://espurna.io
+< Access-Control-Allow-Credentials: true
+< Connection: close
+< WWW-Authenticate: Digest realm="ESPURNA-7D8621", qop="auth", nonce="7f89b0f9a864944a362407d636dbde96", opaque="0f66332ef9a4af0469ad33bcf4558a5a"
+< Accept-Ranges: none
+<
+* Closing connection 0
+* Issue another request to this URL: 'http://192.168.2.100/upgrade'
+* Hostname 192.168.2.100 was found in DNS cache
+*   Trying 192.168.2.100...
+* TCP_NODELAY set
+* Connected to 192.168.2.100 (192.168.2.100) port 80 (#1)
+* Server auth using Digest with user 'admin'
+> POST /upgrade HTTP/1.1
+> Host: 192.168.2.100
+> Authorization: Digest username="admin",realm="ESPURNA-7D8621",nonce="7f89b0f9a864944a362407d636dbde96",uri="/upgrade",cnonce="a7be14606b3cc8d794c874e9fd2fca4c",nc=00000001,response="9ddab98fe164144375104c3214ef0d8a",qop="auth",opaque="0f66332ef9a4af0469ad33bcf4558a5a"
+> User-Agent: curl/7.55.1
+> Accept: */*
+> Content-Length: 374405
+> Expect: 100-continue
+> Content-Type: multipart/form-data; boundary=------------------------6c0988346307089d
+>
+< HTTP/1.1 100 Continue
+* Recv failure: Connection was reset
+* Closing connection 1
+curl: (56) Recv failure: Connection was reset
+
+D:\>curl --digest --user admin:ESPress0 --header "Content-Type: multipart/form-data" --form "filename=@firmware-core.bin" --verbose http://192.168.2.100/upgrade
+*   Trying 192.168.2.100...
+* TCP_NODELAY set
+* Connected to 192.168.2.100 (192.168.2.100) port 80 (#0)
+* Server auth using Digest with user 'admin'
+> POST /upgrade HTTP/1.1
+> Host: 192.168.2.100
+> User-Agent: curl/7.55.1
+> Accept: */*
+> Content-Length: 0
+>
+* Recv failure: Connection was reset
+* Closing connection 0
+curl: (56) Recv failure: Connection was reset
+
+D:\>curl --digest --user admin:ESPress0 --header "Content-Type: multipart/form-data" --form "filename=@firmware-core.bin" --verbose http://192.168.2.100/upgrade
+*   Trying 192.168.2.100...
+* TCP_NODELAY set
+* Connected to 192.168.2.100 (192.168.2.100) port 80 (#0)
+* Server auth using Digest with user 'admin'
+> POST /upgrade HTTP/1.1
+> Host: 192.168.2.100
+> User-Agent: curl/7.55.1
+> Accept: */*
+> Content-Length: 0
+>
+< HTTP/1.1 401 Unauthorized
+< Content-Length: 0
+< Access-Control-Allow-Origin: http://espurna.io
+< Access-Control-Allow-Credentials: true
+< Connection: close
+< WWW-Authenticate: Digest realm="ESPURNA-7D8621", qop="auth", nonce="823679d98ccadd22bf1df22656d5477a", opaque="7eea984117537e079343aca6f7c68f35"
+< Accept-Ranges: none
+<
+* Closing connection 0
+* Issue another request to this URL: 'http://192.168.2.100/upgrade'
+* Hostname 192.168.2.100 was found in DNS cache
+*   Trying 192.168.2.100...
+* TCP_NODELAY set
+* Connected to 192.168.2.100 (192.168.2.100) port 80 (#1)
+* Server auth using Digest with user 'admin'
+> POST /upgrade HTTP/1.1
+> Host: 192.168.2.100
+> Authorization: Digest username="admin",realm="ESPURNA-7D8621",nonce="823679d98ccadd22bf1df22656d5477a",uri="/upgrade",cnonce="69046b9d26938accfe248d05c76f3ae9",nc=00000001,response="929e747e439faaa964b942d84c602be8",qop="auth",opaque="7eea984117537e079343aca6f7c68f35"
+> User-Agent: curl/7.55.1
+> Accept: */*
+> Content-Length: 374405
+> Expect: 100-continue
+> Content-Type: multipart/form-data; boundary=------------------------059b72baf4ea6916
+>
+< HTTP/1.1 100 Continue
+* Send failure: Connection was aborted
+* Closing connection 1
+curl: (55) Send failure: Connection was aborted
