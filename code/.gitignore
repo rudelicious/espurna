@@ -12,3 +12,5 @@ custom.h
 .pio
 libraries/
 espurna/espurna.ino.cpp
+extra/
+mqtt_client_trusted_root_ca.h
